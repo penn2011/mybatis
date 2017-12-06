@@ -10,4 +10,6 @@ public interface UserMapper {
 
     @Select("select * from reg_user where id=#{id}")
     User selectUserById(Integer id);
+
+    Integer insertUser(User unSaveUser);
 }

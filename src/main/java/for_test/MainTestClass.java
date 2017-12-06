@@ -50,6 +50,18 @@ public class MainTestClass {
         System.out.println((User)sqlSession.selectOne("selectUserById", 1));
     }
 
+    /**
+     * 测试单条的主键返回
+     */
+    @Test
+    public void testGeneratedKeySingle(){
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        User user = new User("测试用户5", 30);
+
+        mapper.insertUser(user);
+       System.out.println(user.getId());
+    }
+
 
 
 
