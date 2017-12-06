@@ -10,6 +10,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainTestClass {
 
@@ -60,6 +62,26 @@ public class MainTestClass {
 
         mapper.insertUser(user);
        System.out.println(user.getId());
+    }
+
+    /**
+     * 测试多条键返回
+     */
+    @Test
+    public void testGeneratedKeys(){
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+       List<User> userList=Arrays.asList(
+                new User("测试用户9", 21),
+                new User("测试用户10", 21),
+                new User("测试用户11", 21),
+                new User("测试用户12", 21)
+        );
+        mapper.insertMany(userList);
+
+        //输出id
+        userList.forEach(e-> System.out.println(e.getId()));
+
+
     }
 
 

@@ -3,6 +3,8 @@ package for_test;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 public interface UserMapper {
 
 
@@ -12,4 +14,6 @@ public interface UserMapper {
     User selectUserById(Integer id);
 
     Integer insertUser(User unSaveUser);
+
+    void insertMany(List<User> userList);
 }

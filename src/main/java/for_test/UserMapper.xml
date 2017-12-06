@@ -7,6 +7,13 @@
         VALUE (#{name},#{age});
     </insert>
 
+    <insert id="insertMany">
+         INSERT INTO reg_user (name, age)
+        VALUES
+        <foreach collection="list" item="user">
+            (#{user.name},#{user.age});
+        </foreach>
+    </insert>
 
     <select id="selectUser" resultType="for_test.User">
         SELECT *
