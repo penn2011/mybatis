@@ -7,17 +7,23 @@
         VALUE (#{name},#{age});
     </insert>
 
-    <insert id="insertMany">
+    <insert id="insertMany" useGeneratedKeys="true" keyProperty="id">
          INSERT INTO reg_user (name, age)
         VALUES
-        <foreach collection="list" item="user">
-            (#{user.name},#{user.age});
+        <foreach collection="list" item="user" separator=",">
+            (#{user.name},#{user.age})
         </foreach>
     </insert>
 
-    <select id="selectUser" resultType="for_test.User">
+    <select id="selectUser" resultType="User">
         SELECT *
         FROM reg_user
         WHERE id=#{id};
+    </select>
+    <select id="selectUserMap" resultType="map">
+        SELECT *
+        FROM reg_user
+        WHERE id=#{id};
+
     </select>
 </mapper>

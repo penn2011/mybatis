@@ -20,9 +20,12 @@
         <setting name="localCacheScope" value="SESSION"/>
         <setting name="jdbcTypeForNull" value="OTHER"/>
         <setting name="lazyLoadTriggerMethods" value="equals,clone,hashCode,toString"/>
+        <setting name="logImpl" value="LOG4J"/>
     </settings>
 
-
+    <typeAliases>
+        <typeAlias type="for_test.User" alias="User"/>
+    </typeAliases>
 
     <!--环境配置-->
     <environments default="development">
