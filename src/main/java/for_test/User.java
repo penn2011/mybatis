@@ -1,9 +1,13 @@
 package for_test;
 
+import java.util.List;
+
 public class User {
     private Integer id;
     private String name;
     private Integer age;
+
+    private List<Pet> pets;
 
     public User() {
     }
@@ -43,12 +47,21 @@ public class User {
         this.age = age;
     }
 
+    public List<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(List<Pet> pets) {
+        this.pets = pets;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", age=" + age +
+                ", pets=" + pets +
                 '}';
     }
 }

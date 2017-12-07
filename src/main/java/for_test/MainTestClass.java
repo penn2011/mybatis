@@ -24,11 +24,12 @@ public class MainTestClass {
         String myBatisConfig = "for_test/mybatis-config.xml";
         InputStream resourceAsStream = Resources.getResourceAsStream(myBatisConfig);
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resourceAsStream);
-        sqlSession = sqlSessionFactory.openSession();
+        sqlSession = sqlSessionFactory.openSession(true);
     }
 
     @After
     public void after() {
+        //sqlSession.commit();
         sqlSession.close();
     }
 
@@ -50,7 +51,7 @@ public class MainTestClass {
      */
     @Test
     public void testSqlStrQuery() {
-        System.out.println((User) sqlSession.selectOne("selectUser", 1));
+        System.out.println((User) sqlSession.selectOne("selectUser", 20));
         System.out.println((User) sqlSession.selectOne("selectUserById", 1));
     }
 
@@ -80,17 +81,44 @@ public class MainTestClass {
         );
         mapper.insertMany(userList);
 
+
         //输出id
-        userList.forEach(e -> System.out.println(e.getId()));
+        userList.forEach(e -> System.out.println(e));
 
 
     }
 
+    /**
+     * 测试自动映射
+     * 指定 MyBatis 应如何自动映射列到字段或属性。
+     * NONE 表示取消自动映射
+     * PARTIAL 将自动映射结果除了那些有内部定义内嵌结果映射的(joins).
+     * FULL 会自动映射任意复杂的结果集（无论是否嵌套）。
+     */
+    @Test
+    public  void testAutoMapping(){
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        System.out.println(mapper.selectUserResultMap(1));
+    }
+    /**
+     * 测试查询以返回一个map的方式
+     */
     @Test
     public void testReturnMap() {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
         System.out.println(mapper.selectUserMap(1));
 
+    }
+
+
+    /**
+     * 测试复杂的查询
+     */
+    @Test
+    public void testComplicatedSelect(){
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+         User user= mapper.findUserWithAllPets(1);
+        System.out.println(user);
     }
 
 

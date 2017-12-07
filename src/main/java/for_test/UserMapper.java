@@ -19,4 +19,8 @@ public interface UserMapper {
     void insertMany(List<User> userList);
 
     List<Map> selectUserMap(int i);
+
+    User findUserWithAllPets(@Param("id") int i);
+
+    User selectUserResultMap(int id);
 }
