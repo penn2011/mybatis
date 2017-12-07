@@ -7,7 +7,7 @@
         VALUE (#{name},#{age});
     </insert>
 
-    <insert id="insertMany" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertMany"   keyProperty="id">
          INSERT INTO reg_user (name, age)
         VALUES
         <foreach collection="list" item="user" separator=",">
