@@ -101,21 +101,57 @@ public class XMLConfigBuilder extends BaseBuilder {
   }
 
   private void parseConfiguration(XNode root) {
+    /**
+     * 进入解析配置文件的流程
+     */
     try {
       //issue #117 read properties first
+      /**
+        step 1 : 解析properties
+      */
+
       propertiesElement(root.evalNode("properties"));
       Properties settings = settingsAsProperties(root.evalNode("settings"));
       loadCustomVfs(settings);
+
+      /**
+        step 2 : 注册别名
+      */
+
       typeAliasesElement(root.evalNode("typeAliases"));
+
+      /**
+        step 3 : 注册插件
+      */
+
       pluginElement(root.evalNode("plugins"));
+
+      /**
+        step 4 : 设置返回结果集的对象工厂
+      */
+
       objectFactoryElement(root.evalNode("objectFactory"));
       objectWrapperFactoryElement(root.evalNode("objectWrapperFactory"));
       reflectorFactoryElement(root.evalNode("reflectorFactory"));
+
+      /**
+        step 5 : 设置setting元素
+      */
+
       settingsElement(settings);
       // read it after objectFactory and objectWrapperFactory issue #631
       environmentsElement(root.evalNode("environments"));
       databaseIdProviderElement(root.evalNode("databaseIdProvider"));
+
+      /**
+        step 6 : 设置typehandlers
+      */
+
       typeHandlerElement(root.evalNode("typeHandlers"));
+
+      /**
+        step 7 : 设置mappers
+      */
       mapperElement(root.evalNode("mappers"));
     } catch (Exception e) {
       throw new BuilderException("Error parsing SQL Mapper Configuration. Cause: " + e, e);
