@@ -20,12 +20,16 @@ import java.sql.Connection;
 /**
  * @author Clinton Begin
  */
+
+/**
+ * 枚举类，代表数据库的事务隔离级别
+ */
 public enum TransactionIsolationLevel {
-  NONE(Connection.TRANSACTION_NONE),
-  READ_COMMITTED(Connection.TRANSACTION_READ_COMMITTED),
-  READ_UNCOMMITTED(Connection.TRANSACTION_READ_UNCOMMITTED),
-  REPEATABLE_READ(Connection.TRANSACTION_REPEATABLE_READ),
-  SERIALIZABLE(Connection.TRANSACTION_SERIALIZABLE);
+  NONE(Connection.TRANSACTION_NONE),/*无*/
+  READ_COMMITTED(Connection.TRANSACTION_READ_COMMITTED),/*读已提交*/
+  READ_UNCOMMITTED(Connection.TRANSACTION_READ_UNCOMMITTED),/*读未提交*/
+  REPEATABLE_READ(Connection.TRANSACTION_REPEATABLE_READ),/*可重复读*/
+  SERIALIZABLE(Connection.TRANSACTION_SERIALIZABLE);/*序列化*/
 
   private final int level;
 

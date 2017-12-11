@@ -4,26 +4,75 @@
 
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO reg_user (name, age)
-        VALUE (#{name},#{age});
+            VALUE (#{name}, #{age});
     </insert>
 
-    <insert id="insertMany"   keyProperty="id">
-         INSERT INTO reg_user (name, age)
+    <insert id="insertMany" keyProperty="id">
+        INSERT INTO reg_user (name, age)
         VALUES
         <foreach collection="list" item="user" separator=",">
             (#{user.name},#{user.age})
         </foreach>
     </insert>
 
-    <select id="selectUser" resultType="User">
-        SELECT *
+
+    <resultMap id="userMap" type="User"></resultMap>
+
+    <select id="selectUserResultMap" resultMap="userMap">
+        SELECT
+            id,
+            name,
+            age
         FROM reg_user
-        WHERE id=#{id};
+        WHERE id = #{id}
     </select>
-    <select id="selectUserMap" resultType="map">
+
+    <select id="selectUser" resultType="for_test.User">
         SELECT *
         FROM reg_user
-        WHERE id=#{id};
+        WHERE id = #{id};
+    </select>
+    <select id="selectUserMap" resultType="java.util.Map">
+        SELECT *
+        FROM reg_user
+        WHERE id = #{id};
 
     </select>
+
+
+    <!--测试复杂查询-->
+    <resultMap id="userWithPets" type="for_test.User">
+        <id property="id" column="id"/>
+        <!--处理一对多关联-->
+        <collection property="pets" ofType="for_test.Pet">
+            <id property="petId" column="pet_id"/>
+            <result property="petName" column="pet_name"/>
+            <!--处理一对一关联-->
+            <association property="master" javaType="User"/>
+            <collection property="toys" ofType="for_test.Toy" >
+                <id property="toyId" column="toy_id"/>
+                <result property="toyName" column="toy_name"/>
+                <association property="petMaster" javaType="for_test.Pet"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="findUserWithAllPets" resultMap="userWithPets">
+        SELECT
+            u.id,
+            u.name,
+            u.age,
+            p.pet_id,
+            p.pet_name,
+            t.toy_id,
+            t.toy_name
+        FROM reg_user u
+            LEFT JOIN pet p ON p.master_id = u.id
+            LEFT JOIN toy t ON t.pet_id = p.pet_id
+        WHERE u.id = #{id};
+
+    </select>
+
+    <!--开启缓存-->
+    <!--<cache />-->
 </mapper>
