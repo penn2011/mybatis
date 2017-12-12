@@ -71,6 +71,7 @@ public class XmlConfigBuilderTest {
 
   @Test
   public void shouldSuccessfullyLoadMinimalXMLConfigFile() throws Exception {
+    //空的配置文件
     String resource = "org/apache/ibatis/builder/MinimalMapperConfig.xml";
     InputStream inputStream = Resources.getResourceAsStream(resource);
     XMLConfigBuilder builder = new XMLConfigBuilder(inputStream);

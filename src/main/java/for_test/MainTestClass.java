@@ -1,13 +1,25 @@
 package for_test;
 
+import org.apache.ibatis.datasource.DataSourceFactory;
+import org.apache.ibatis.datasource.pooled.PooledDataSourceFactory;
+import org.apache.ibatis.datasource.unpooled.UnpooledDataSource;
+import org.apache.ibatis.executor.SimpleExecutor;
 import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.mapping.Environment;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.ParameterMap;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
+import org.apache.ibatis.transaction.managed.ManagedTransactionFactory;
+import org.apache.logging.log4j.core.appender.db.jdbc.JdbcDatabaseManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -43,6 +55,41 @@ public class MainTestClass {
     public void testSqlSessionFacotry() throws IOException {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
         System.out.println(mapper.selectUser(1));
+
+    }
+
+    public static void main(String[] args) {
+        UnpooledDataSource unpooledDataSource = new UnpooledDataSource("com.mysql.cj.jdbc.Driver",
+                "jdbc:mysql://localhost:3306/mybatis_test?serverTimezone=UTC",
+                "root",
+                "root"
+        );
+
+
+        Environment environment = new Environment("whatever",
+                new ManagedTransactionFactory(),
+                unpooledDataSource);
+
+        Configuration configuration = new Configuration(environment);
+        DefaultSqlSessionFactory defaultSqlSessionFactory = new DefaultSqlSessionFactory(configuration);
+        SqlSession sqlSession = defaultSqlSessionFactory.openSession(true);
+        System.out.println((User) sqlSession.selectOne("selectUser", 20));
+    }
+
+
+    @Test
+    public void testExcutor() {
+        //SimpleExecutor simpleExecutor = new SimpleExecutor();
+
+
+    }
+
+    @Test
+    public void testConfig() {
+        Configuration configuration = sqlSession.getConfiguration();
+        MappedStatement selectMappedStatement =
+                configuration.getMappedStatement("selectUser");
+
 
     }
 
@@ -96,10 +143,11 @@ public class MainTestClass {
      * FULL 会自动映射任意复杂的结果集（无论是否嵌套）。
      */
     @Test
-    public  void testAutoMapping(){
+    public void testAutoMapping() {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
         System.out.println(mapper.selectUserResultMap(1));
     }
+
     /**
      * 测试查询以返回一个map的方式
      */
@@ -115,9 +163,9 @@ public class MainTestClass {
      * 测试复杂的查询
      */
     @Test
-    public void testComplicatedSelect(){
+    public void testComplicatedSelect() {
         UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-         User user= mapper.findUserWithAllPets(1);
+        User user = mapper.findUserWithAllPets(1);
         System.out.println(user);
     }
 
